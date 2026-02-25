@@ -1,0 +1,350 @@
+mysql> use zero_waste;
+Database changed
+mysql> show tables;
++----------------------+
+| Tables_in_zero_waste |
++----------------------+
+| menu_items           |
+| order_items          |
+| orders               |
+| payments             |
+| places               |
+| ratings              |
+| restaurants          |
+| returns              |
+| reusable_containers  |
+| surplus_food         |
+| transactions         |
+| users                |
++----------------------+
+12 rows in set (0.28 sec)
+
+mysql> desc menu_items;
++-------------+---------------+------+-----+---------+----------------+
+| Field       | Type          | Null | Key | Default | Extra          |
++-------------+---------------+------+-----+---------+----------------+
+| item_id     | int           | NO   | PRI | NULL    | auto_increment |
+| rest_id     | int           | YES  | MUL | NULL    |                |
+| item_name   | varchar(100)  | YES  |     | NULL    |                |
+| description | text          | YES  |     | NULL    |                |
+| price       | decimal(10,2) | YES  |     | NULL    |                |
+| category    | varchar(50)   | YES  |     | NULL    |                |
+| available   | tinyint(1)    | YES  |     | 1       |                |
+| image_url   | varchar(255)  | YES  |     | NULL    |                |
++-------------+---------------+------+-----+---------+----------------+
+8 rows in set (0.03 sec)
+
+mysql> desc order_items;
++------------+---------------+------+-----+---------+-------+
+| Field      | Type          | Null | Key | Default | Extra |
++------------+---------------+------+-----+---------+-------+
+| order_id   | int           | NO   | PRI | NULL    |       |
+| item_id    | int           | NO   | PRI | NULL    |       |
+| quantity   | int           | YES  |     | NULL    |       |
+| price      | decimal(10,2) | YES  |     | NULL    |       |
+| is_surplus | tinyint(1)    | YES  |     | NULL    |       |
++------------+---------------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+
+mysql> desc orders;
++----------------+-------------+------+-----+-------------------+-------------------+
+| Field          | Type        | Null | Key | Default           | Extra             |
++----------------+-------------+------+-----+-------------------+-------------------+
+| order_id       | int         | NO   | PRI | NULL              | auto_increment    |
+| user_id        | int         | YES  | MUL | NULL              |                   |
+| rest_id        | int         | YES  | MUL | NULL              |                   |
+| order_date     | timestamp   | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
+| order_status   | varchar(50) | YES  |     | pending           |                   |
+| packaging_type | varchar(50) | YES  |     | NULL              |                   |
+| container_id   | int         | YES  | MUL | NULL              |                   |
++----------------+-------------+------+-----+-------------------+-------------------+
+7 rows in set (0.01 sec)
+
+mysql> desc payments;
++----------------+---------------+------+-----+-------------------+-------------------+
+| Field          | Type          | Null | Key | Default           | Extra             |
++----------------+---------------+------+-----+-------------------+-------------------+
+| pay_id         | int           | NO   | PRI | NULL              | auto_increment    |
+| order_id       | int           | YES  | MUL | NULL              |                   |
+| user_id        | int           | YES  | MUL | NULL              |                   |
+| amount         | decimal(10,2) | YES  |     | NULL              |                   |
+| payment_method | varchar(50)   | YES  |     | NULL              |                   |
+| status         | varchar(50)   | YES  |     | NULL              |                   |
+| transaction_id | varchar(100)  | YES  |     | NULL              |                   |
+| timestamp      | timestamp     | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
++----------------+---------------+------+-----+-------------------+-------------------+
+8 rows in set (0.01 sec)
+
+mysql> desc places;
++----------+--------------+------+-----+---------+----------------+
+| Field    | Type         | Null | Key | Default | Extra          |
++----------+--------------+------+-----+---------+----------------+
+| place_id | int          | NO   | PRI | NULL    | auto_increment |
+| user_id  | int          | YES  | MUL | NULL    |                |
+| address  | text         | YES  |     | NULL    |                |
+| city     | varchar(100) | YES  |     | NULL    |                |
+| pincode  | varchar(10)  | YES  |     | NULL    |                |
++----------+--------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> desc ratings;
++-----------+-----------+------+-----+-------------------+-------------------+
+| Field     | Type      | Null | Key | Default           | Extra             |
++-----------+-----------+------+-----+-------------------+-------------------+
+| rating_id | int       | NO   | PRI | NULL              | auto_increment    |
+| user_id   | int       | YES  | MUL | NULL              |                   |
+| rest_id   | int       | YES  | MUL | NULL              |                   |
+| order_id  | int       | YES  | MUL | NULL              |                   |
+| rating    | int       | YES  |     | NULL              |                   |
+| review    | text      | YES  |     | NULL              |                   |
+| date      | timestamp | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
++-----------+-----------+------+-----+-------------------+-------------------+
+7 rows in set (0.02 sec)
+
+mysql> desc restaurants;
++---------------+--------------+------+-----+---------+----------------+
+| Field         | Type         | Null | Key | Default | Extra          |
++---------------+--------------+------+-----+---------+----------------+
+| rest_id       | int          | NO   | PRI | NULL    | auto_increment |
+| rest_name     | varchar(100) | YES  |     | NULL    |                |
+| location      | varchar(255) | YES  |     | NULL    |                |
+| avg_rating    | decimal(2,1) | YES  |     | 0.0     |                |
+| opening_hours | varchar(100) | YES  |     | NULL    |                |
+| image_url     | varchar(255) | YES  |     | NULL    |                |
++---------------+--------------+------+-----+---------+----------------+
+6 rows in set (0.00 sec)
+
+mysql> desc returns;
++--------------+-----------+------+-----+-------------------+-------------------+
+| Field        | Type      | Null | Key | Default           | Extra             |
++--------------+-----------+------+-----+-------------------+-------------------+
+| return_id    | int       | NO   | PRI | NULL              | auto_increment    |
+| user_id      | int       | YES  | MUL | NULL              |                   |
+| container_id | int       | YES  | MUL | NULL              |                   |
+| order_id     | int       | YES  | MUL | NULL              |                   |
+| return_date  | timestamp | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
++--------------+-----------+------+-----+-------------------+-------------------+
+5 rows in set (0.00 sec)
+
+mysql> desc resuable_container;
+ERROR 1146 (42S02): Table 'zero_waste.resuable_container' doesn't exist
+mysql> desc resuable_containers;
+ERROR 1146 (42S02): Table 'zero_waste.resuable_containers' doesn't exist
+mysql> desc reusable_containers;
++----------------+---------------+------+-----+-----------+----------------+
+| Field          | Type          | Null | Key | Default   | Extra          |
++----------------+---------------+------+-----+-----------+----------------+
+| container_id   | int           | NO   | PRI | NULL      | auto_increment |
+| type           | varchar(50)   | YES  |     | NULL      |                |
+| deposit_amount | decimal(10,2) | YES  |     | NULL      |                |
+| return_status  | varchar(50)   | YES  |     | available |                |
++----------------+---------------+------+-----+-----------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> desc users;
++---------------+--------------+------+-----+---------+----------------+
+| Field         | Type         | Null | Key | Default | Extra          |
++---------------+--------------+------+-----+---------+----------------+
+| user_id       | int          | NO   | PRI | NULL    | auto_increment |
+| name          | varchar(100) | YES  |     | NULL    |                |
+| email         | varchar(100) | YES  | UNI | NULL    |                |
+| phone         | varchar(15)  | YES  |     | NULL    |                |
+| age           | int          | YES  |     | NULL    |                |
+| date_of_birth | date         | YES  |     | NULL    |                |
+| password      | varchar(255) | YES  |     | NULL    |                |
++---------------+--------------+------+-----+---------+----------------+
+7 rows in set (0.00 sec)
+
+mysql> desc surplus_food;
++------------------+---------------+------+-----+---------+----------------+
+| Field            | Type          | Null | Key | Default | Extra          |
++------------------+---------------+------+-----+---------+----------------+
+| surplus_id       | int           | NO   | PRI | NULL    | auto_increment |
+| rest_id          | int           | YES  | MUL | NULL    |                |
+| item_id          | int           | YES  | MUL | NULL    |                |
+| available_qty    | int           | YES  |     | NULL    |                |
+| discounted_price | decimal(10,2) | YES  |     | NULL    |                |
+| expiry_time      | datetime      | YES  |     | NULL    |                |
++------------------+---------------+------+-----+---------+----------------+
+6 rows in set (0.00 sec)
+
+mysql> desc transactions;
++----------+---------------+------+-----+-------------------+-------------------+
+| Field    | Type          | Null | Key | Default           | Extra             |
++----------+---------------+------+-----+-------------------+-------------------+
+| trans_id | int           | NO   | PRI | NULL              | auto_increment    |
+| pay_id   | int           | YES  | MUL | NULL              |                   |
+| process  | varchar(50)   | YES  |     | NULL              |                   |
+| amount   | decimal(10,2) | YES  |     | NULL              |                   |
+| date     | timestamp     | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
++----------+---------------+------+-----+-------------------+-------------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from transaction;
+ERROR 1146 (42S02): Table 'zero_waste.transaction' doesn't exist
+mysql> select * from transactions;
++----------+--------+-----------+--------+---------------------+
+| trans_id | pay_id | process   | amount | date                |
++----------+--------+-----------+--------+---------------------+
+|        1 |      1 | completed | 300.00 | 2026-02-23 21:08:43 |
++----------+--------+-----------+--------+---------------------+
+1 row in set (0.07 sec)
+
+mysql> select * from surplus_food;
++------------+---------+---------+---------------+------------------+---------------------+
+| surplus_id | rest_id | item_id | available_qty | discounted_price | expiry_time         |
++------------+---------+---------+---------------+------------------+---------------------+
+|          1 |       1 |       1 |             5 |           100.00 | 2026-02-24 02:00:54 |
+|          2 |       2 |       3 |             3 |           180.00 | 2026-02-24 00:00:54 |
+|          3 |       1 |       2 |             4 |           120.00 | 2026-02-25 02:26:13 |
+|          4 |       2 |       3 |             3 |           180.00 | 2026-02-25 01:26:13 |
+|          5 |       3 |       4 |             5 |            90.00 | 2026-02-25 03:26:13 |
+|          6 |       4 |      21 |             6 |            54.00 | 2026-02-25 02:26:13 |
+|          7 |       5 |      24 |             3 |            51.00 | 2026-02-25 00:26:13 |
+|          8 |       6 |      27 |             4 |            42.00 | 2026-02-25 03:26:13 |
+|          9 |       7 |      30 |             5 |            36.00 | 2026-02-25 01:26:13 |
+|         10 |       8 |      33 |             4 |            45.00 | 2026-02-25 02:26:13 |
++------------+---------+---------+---------------+------------------+---------------------+
+10 rows in set (0.00 sec)
+
+mysql> select * from users;
++---------+---------+-------------------+------------+------+---------------+--------------------------------------------------------------+
+| user_id | name    | email             | phone      | age  | date_of_birth | password                                                     |
++---------+---------+-------------------+------------+------+---------------+--------------------------------------------------------------+
+|       1 | Lakshmi | laksh@test.com    | 9876543210 |   21 | 2003-05-12    | $2b$10$f7ERXLEkddptvxF4VjmdouUYRoT1.uvdTRU9UGLsamiMJF/dYEkqy |
+|       2 | Test    | test@gmail.com    | NULL       | NULL | NULL          | 123456                                                       |
+|       3 | Deepa   | deepa23@gmail.com | 12345678   |   23 | 2003-06-14    | $2b$10$bglgm/zc8tFLofWXoH2c6u6u7IYZglM1jje20GKIs8zRQV7VixiFq |
++---------+---------+-------------------+------------+------+---------------+--------------------------------------------------------------+
+3 rows in set (0.01 sec)
+
+mysql> select * from reusable_containers;
++--------------+-------------+----------------+---------------+
+| container_id | type        | deposit_amount | return_status |
++--------------+-------------+----------------+---------------+
+|            1 | Steel Box   |         100.00 | available     |
+|            2 | Glass Jar   |          80.00 | available     |
+|            3 | Bamboo Bowl |         120.00 | available     |
++--------------+-------------+----------------+---------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from returns;
+Empty set (0.04 sec)
+
+mysql> select * from restaurants;
++---------+------------------------+-----------+------------+---------------+--------------------------------------------------------------------------------------------+
+| rest_id | rest_name              | location  | avg_rating | opening_hours | image_url                                                                                  |
++---------+------------------------+-----------+------------+---------------+--------------------------------------------------------------------------------------------+
+|       1 | Green Bowl             | Bangalore |        5.0 | 9 AM - 10 PM  | https://images.unsplash.com/photo-1555992336-03a23c7b20ee?w=1200&auto=format&fit=crop&q=80 |
+|       2 | Eco Bites              | Bangalore |        0.0 | 10 AM - 11 PM | https://images.unsplash.com/photo-1552566626-52f8b828add9?w=1200&auto=format&fit=crop&q=80 |
+|       3 | Sustainable Kitchen    | Bangalore |        0.0 | 8 AM - 9 PM   | NULL                                                                                       |
+|       4 | Urban Harvest Cafe     | Bangalore |        4.6 | 8 AM - 10 PM  | https://images.unsplash.com/photo-1559339352-11d035aa65de                                  |
+|       5 | The Green Fork         | Mumbai    |        4.4 | 9 AM - 11 PM  | https://images.unsplash.com/photo-1552566626-52f8b828add9                                  |
+|       6 | Eco Feast Bistro       | Chennai   |        4.2 | 10 AM - 9 PM  | https://images.unsplash.com/photo-1517248135467-4c7edcad34c4                               |
+|       7 | Sattva Organic Kitchen | Hyderabad |        4.7 | 8 AM - 10 PM  | https://images.unsplash.com/photo-1504674900247-0877df9cc836                               |
+|       8 | Nature?s Plate         | Pune      |        4.3 | 9 AM - 10 PM  | https://images.unsplash.com/photo-1498654896293-37aacf113fd9                               |
++---------+------------------------+-----------+------------+---------------+--------------------------------------------------------------------------------------------+
+8 rows in set (0.00 sec)
+
+mysql> select * from ratings;
++-----------+---------+---------+----------+--------+---------------------------+---------------------+
+| rating_id | user_id | rest_id | order_id | rating | review                    | date                |
++-----------+---------+---------+----------+--------+---------------------------+---------------------+
+|         1 |       1 |       1 |        1 |      5 | Amazing sustainable food! | 2026-02-23 21:15:16 |
++-----------+---------+---------+----------+--------+---------------------------+---------------------+
+1 row in set (0.04 sec)
+
+mysql> select * from places;
+Empty set (0.04 sec)
+
+mysql> select * from payments;
++--------+----------+---------+--------+----------------+---------+------------------+---------------------+
+| pay_id | order_id | user_id | amount | payment_method | status  | transaction_id   | timestamp           |
++--------+----------+---------+--------+----------------+---------+------------------+---------------------+
+|      1 |        1 |       1 | 300.00 | UPI            | success | TXN1771861123546 | 2026-02-23 21:08:43 |
++--------+----------+---------+--------+----------------+---------+------------------+---------------------+
+1 row in set (0.03 sec)
+
+mysql> select * from orders;
++----------+---------+---------+---------------------+--------------+----------------+--------------+
+| order_id | user_id | rest_id | order_date          | order_status | packaging_type | container_id |
++----------+---------+---------+---------------------+--------------+----------------+--------------+
+|        1 |       1 |       1 | 2026-02-23 21:04:19 | confirmed    | normal         |         NULL |
+|        2 |    NULL |       1 | 2026-02-23 22:39:42 | pending      | reusable       |            1 |
+|        3 |    NULL |       1 | 2026-02-23 22:50:36 | pending      | normal         |         NULL |
+|        4 |    NULL |       1 | 2026-02-23 23:07:37 | pending      | normal         |         NULL |
+|        5 |    NULL |       1 | 2026-02-23 23:19:14 | pending      | normal         |         NULL |
+|        6 |    NULL |       1 | 2026-02-23 23:31:22 | pending      | reusable       |            2 |
+|        7 |    NULL |       1 | 2026-02-23 23:31:42 | pending      | normal         |         NULL |
+|        8 |    NULL |       1 | 2026-02-23 23:33:41 | pending      | reusable       |            1 |
+|        9 |    NULL |       1 | 2026-02-24 09:29:03 | pending      | normal         |         NULL |
+|       10 |    NULL |       1 | 2026-02-24 09:48:01 | pending      | normal         |         NULL |
+|       11 |    NULL |       1 | 2026-02-24 09:57:46 | pending      | normal         |         NULL |
+|       12 |    NULL |       1 | 2026-02-24 10:02:15 | pending      | normal         |         NULL |
+|       13 |    NULL |       1 | 2026-02-24 10:28:21 | pending      | normal         |         NULL |
+|       14 |    NULL |       2 | 2026-02-24 10:35:50 | pending      | normal         |         NULL |
+|       15 |    NULL |       2 | 2026-02-24 10:43:35 | pending      | normal         |         NULL |
+|       16 |    NULL |       2 | 2026-02-24 11:03:05 | pending      | normal         |         NULL |
+|       17 |    NULL |       3 | 2026-02-24 14:35:52 | pending      | normal         |         NULL |
+|       18 |    NULL |       1 | 2026-02-24 15:14:26 | pending      | reusable       |            2 |
+|       19 |    NULL |       3 | 2026-02-24 15:56:51 | pending      | normal         |         NULL |
+|       20 |       3 |       1 | 2026-02-24 20:05:17 | pending      | normal         |         NULL |
+|       21 |       3 |       5 | 2026-02-24 20:45:14 | pending      | normal         |         NULL |
+|       22 |       3 |       6 | 2026-02-24 21:28:07 | pending      | reusable       |            1 |
++----------+---------+---------+---------------------+--------------+----------------+--------------+
+22 rows in set (0.00 sec)
+
+mysql> select * from order_items;
++----------+---------+----------+--------+------------+
+| order_id | item_id | quantity | price  | is_surplus |
++----------+---------+----------+--------+------------+
+|        1 |       1 |        2 | 150.00 |          0 |
+|        2 |       1 |     NULL | 150.00 |       NULL |
+|        3 |       3 |     NULL | 250.00 |       NULL |
+|        4 |       1 |     NULL | 150.00 |       NULL |
+|        5 |       2 |        2 | 180.00 |       NULL |
+|        6 |       1 |        2 | 150.00 |       NULL |
+|        7 |       1 |        2 | 150.00 |       NULL |
+|        8 |       1 |        2 | 150.00 |       NULL |
+|        9 |       3 |        2 | 250.00 |       NULL |
+|       10 |       3 |        1 | 250.00 |       NULL |
+|       11 |       3 |        1 | 250.00 |       NULL |
+|       13 |       2 |        1 | 180.00 |       NULL |
+|       14 |       3 |        1 | 250.00 |       NULL |
+|       15 |       3 |        1 | 250.00 |       NULL |
+|       16 |       3 |        3 | 250.00 |       NULL |
+|       17 |       4 |        1 | 120.00 |       NULL |
+|       18 |       1 |        5 | 100.00 |       NULL |
+|       19 |       4 |        1 | 120.00 |       NULL |
+|       20 |       2 |        1 | 180.00 |       NULL |
+|       21 |      24 |        1 |  85.00 |       NULL |
+|       22 |      27 |        1 | 100.00 |       NULL |
++----------+---------+----------+--------+------------+
+21 rows in set (0.00 sec)
+
+mysql> select * from menu_items;
++---------+---------+-----------------------+----------------------------------------------+--------+-------------+-----------+----------------------------------------------------------------------------------------------+
+| item_id | rest_id | item_name             | description                                  | price  | category    | available | image_url                                                                                    |
++---------+---------+-----------------------+----------------------------------------------+--------+-------------+-----------+----------------------------------------------------------------------------------------------+
+|       1 |       1 | Veg Salad             | Fresh organic salad                          | 150.00 | Healthy     |         1 | NULL                                                                                         |
+|       2 |       1 | Brown Rice Bowl       | Rice with veggies                            | 180.00 | Main Course |         1 | NULL                                                                                         |
+|       3 |       2 | Millet Pizza          | Healthy millet pizza                         | 250.00 | Main Course |         1 | NULL                                                                                         |
+|       4 |       3 | Fruit Smoothie        | No sugar smoothie                            | 120.00 | Beverages   |         1 | NULL                                                                                         |
+|      20 |       4 | Avocado Toast Bowl    | Avocado with sourdough toast and greens      | 210.00 | Regular     |         1 | https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=800&auto=format&fit=crop&q=80    |
+|      21 |       4 | Veg Wrap              | Discounted wrap made from surplus vegetables |  90.00 | Surplus     |         1 | https://images.unsplash.com/photo-1511690743698-d9d85f2fbf38?w=800&auto=format&fit=crop&q=80 |
+|      22 |       4 | Organic Smoothie Bowl | Banana berry smoothie bowl with seeds        | 150.00 | Regular     |         1 | https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?w=800&auto=format&fit=crop&q=80 |
+|      23 |       5 | Quinoa Salad          | Protein-rich quinoa with roasted vegetables  | 180.00 | Regular     |         1 | https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&auto=format&fit=crop&q=80 |
+|      24 |       5 | Leftover Pasta Box    | Surplus pasta offered at discounted price    |  85.00 | Surplus     |         1 | https://images.unsplash.com/photo-1525755662778-989d0524087e?w=800&auto=format&fit=crop&q=80 |
+|      25 |       5 | Vegan Burger          | Plant-based burger with whole wheat bun      | 200.00 | Regular     |         1 | https://images.unsplash.com/photo-1600891964599-f61ba0e24092?w=800&auto=format&fit=crop&q=80 |
+|      26 |       6 | Millet Khichdi        | Healthy millet-based Indian dish             | 160.00 | Regular     |         1 | https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?w=800&auto=format&fit=crop&q=80 |
+|      27 |       6 | Rice Combo            | Discounted leftover rice combo               |  70.00 | Surplus     |         1 | https://images.unsplash.com/photo-1586201375761-83865001e31c?w=800&auto=format&fit=crop&q=80 |
+|      28 |       6 | Cold Pressed Juice    | Fresh fruit and vegetable juice              | 130.00 | Regular     |         1 | https://images.unsplash.com/photo-1497534446932-c925b458314e?w=800&auto=format&fit=crop&q=80 |
+|      29 |       7 | Organic Thali Deluxe  | Premium organic meal platter                 | 240.00 | Regular     |         1 | https://images.unsplash.com/photo-1596797038530-2c107229654b?w=800&auto=format&fit=crop&q=80 |
+|      30 |       7 | Chapati Meal          | Chapati meal from surplus preparation        |  60.00 | Surplus     |         1 | https://images.unsplash.com/photo-1604908812313-19c86b69a42d?w=800&auto=format&fit=crop&q=80 |
+|      31 |       7 | Green Detox Juice     | Spinach and apple detox drink                | 120.00 | Regular     |         1 | https://images.unsplash.com/photo-1505576399279-565b52d4ac71?w=800&auto=format&fit=crop&q=80 |
+|      32 |       8 | Farm Fresh Salad      | Locally sourced vegetable salad              | 170.00 | Regular     |         1 | https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=800&auto=format&fit=crop&q=80 |
+|      33 |       8 | Sandwich              | Discount sandwich made from surplus bread    |  75.00 | Surplus     |         1 | https://images.unsplash.com/photo-1553909489-cd47e0907980?w=800&auto=format&fit=crop&q=80    |
+|      34 |       8 | Vegan Brownie         | Dairy-free chocolate brownie                 | 110.00 | Regular     |         1 | https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=800&auto=format&fit=crop&q=80 |
++---------+---------+-----------------------+----------------------------------------------+--------+-------------+-----------+----------------------------------------------------------------------------------------------+
+19 rows in set (0.00 sec)
+
+mysql> notee
