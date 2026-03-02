@@ -216,7 +216,7 @@ The database comes pre-loaded with:
 
 ## 👩‍💻 Author
 
-**Your Name**
+
 - GitHub: [@laksh-me4](https://github.com/laksh-me4)
 
 ---
