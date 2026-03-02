@@ -3,7 +3,7 @@ const db = require("../config/db");
 
 const router = express.Router();
 
-// PROCESS PAYMENT
+
 router.post("/", (req, res) => {
   const { order_id, user_id, amount, payment_method } = req.body;
 
@@ -30,7 +30,7 @@ router.post("/", (req, res) => {
       db.query(transactionSql, [pay_id, amount], (err2) => {
         if (err2) return res.status(500).json({ error: err2.message });
 
-        // Update order status
+        
         db.query(
           "UPDATE orders SET order_status = 'confirmed' WHERE order_id = ?",
           [order_id],

@@ -3,7 +3,7 @@ const db = require("../config/db");
 
 const router = express.Router();
 
-// GET AVAILABLE CONTAINERS
+
 router.get("/", (req, res) => {
   db.query(
     "SELECT * FROM reusable_containers WHERE return_status = 'available'",
@@ -14,7 +14,7 @@ router.get("/", (req, res) => {
   );
 });
 
-// RETURN CONTAINER
+
 router.post("/return", (req, res) => {
   const { user_id, container_id, order_id } = req.body;
 

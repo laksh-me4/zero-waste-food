@@ -3,7 +3,7 @@ const db = require("../config/db");
 
 const router = express.Router();
 
-// GET ALL RESTAURANTS
+
 router.get("/", (req, res) => {
   db.query("SELECT * FROM restaurants", (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
@@ -11,7 +11,7 @@ router.get("/", (req, res) => {
   });
 });
 
-// GET RESTAURANT MENU
+
 router.get("/:id/menu", (req, res) => {
   const restId = req.params.id;
 
@@ -26,7 +26,7 @@ router.get("/:id/menu", (req, res) => {
   });
 });
 
-// GET ALL SURPLUS FOOD
+
 router.get("/surplus/all", (req, res) => {
   const sql = `
     SELECT sf.*, m.item_name, r.rest_name
@@ -40,7 +40,7 @@ router.get("/surplus/all", (req, res) => {
     res.json(results);
   });
 });
-// RATE RESTAURANT
+
 router.post("/:id/rate", (req, res) => {
   const rest_id = req.params.id;
   const { user_id, order_id, rating, review } = req.body;
@@ -56,7 +56,7 @@ router.post("/:id/rate", (req, res) => {
     (err) => {
       if (err) return res.status(500).json({ error: err.message });
 
-      // Update average rating
+      
       const avgSql = `
         UPDATE restaurants r
         SET avg_rating = (
